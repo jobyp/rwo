@@ -1,0 +1,7 @@
+(executable
+ (name hw)
+ (libraries base stdio))
+
+;; Local Variables:
+;; mode: lisp
+;; End:
