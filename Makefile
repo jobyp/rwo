@@ -7,7 +7,7 @@ all: $(patsubst %,%.exe,$(PROGS))
 %.exe : %.ml
 	if test -L $@; then unlink $@; fi
 	dune build $@
-	ln -s _build/default/$@ $(patsubst %.exe,%,$@)
+	ln -fs _build/default/$@ $(patsubst %.exe,%,$@)
 
 .PHONY: clean
 clean:
