@@ -1,11 +1,11 @@
-#require "base";;
-#require "stdio";;
-(* #require "core_bench";; *)
-
-(* open Base;; *)
-(* open Stdio;; *)
-
-
 (* ## added by OPAM user-setup for ocamltop / base ## 3ec62baf6f9c219ae06d9814069da862 ## you can edit, but keep this line *)
 #use "topfind";;
 (* ## end of OPAM user-setup addition for ocamltop / base ## keep this line *)
+
+#require "base";;
+#require "stdio";;
+(* #require "core";; *)
+(* #require "core_bench";; *)
+
+open Base;;
+(* open Stdio;; *)
