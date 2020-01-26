@@ -1,9 +1,6 @@
 open Base
 open Stdio
 
-let ratio x y =
-  Float.of_int x /. Float.of_int y
-
 let even x =
   x % 2 = 0
 
@@ -24,7 +21,6 @@ let long_string s =
 let is_a_multiple x y =
   x % y = 0
 
-let languages = ["OCaml"; "C"; "Python"]
 
 let my_favourite_language = function
   | first :: _ -> first
@@ -167,15 +163,91 @@ let partition array x =
   else if x < array.(lo) then lo
   else partition_aux lo hi
 
+let find_first_negative_entry array =
+  let pos = ref 0 in
+  while !pos < Array.length array && !pos >= 0 do
+    pos := !pos + 1
+  done;
+  if !pos = Array.length array then None else Some !pos
+
+
+let rec read_and_accumulate accum =
+  let line = In_channel.input_line In_channel.stdin in
+  match line with
+  | None -> accum
+  | Some x -> read_and_accumulate (accum +. Float.of_string x)
+
+
+let languages = "OCaml,Perl,C++,C"
+
+let dashed_languages =
+  languages
+  |> String.split ~on:','
+  |> String.concat ~sep:"-"
+
+
+let area_of_ring inner_radius outer_radius =
+  let open Float.O in
+  let pi = Float.pi in
+  let area r = pi * r * r in
+  area outer_radius - area inner_radius
+
+
+let upcase_first_entry line =
+  match String.split ~on:',' line with
+  | first::rest -> String.uppercase first :: rest
+                   |> String.concat ~sep:","
+  | [] -> assert false
+
+
+let rec find_first_repeat list =
+  match list with
+  | [] | [_]     -> None (* only 0 or 1 element, so no repeats *)
+  | x :: y :: tl -> if x = y then Some x
+                    else find_first_repeat (y :: tl)
+
+
+let rec is_even x =
+  if x = 0 then true
+  else is_odd (x - 1)
+and is_odd x =
+  if x = 0 then false
+  else is_even (x - 1)
+
+
+let rec merge cmp left right =
+  match left, right with
+  | [], _              -> right
+  | _, []              -> left
+  | h1 :: t1, h2 :: t2 ->
+     if cmp h1 h2
+     then h1 :: merge cmp t1 (h2 :: t2)
+     else h2 :: merge cmp (h1 :: t1) t2
+
+
+let rec msort cmp list =
+  let len = List.length list in
+  if len < 2 then list (* 0 or 1 elements is sorted *)
+  else
+    let mid = len / 2 in
+    let left = List.take list mid in
+    let right = List.drop list mid in
+    merge cmp (msort cmp left) (msort cmp right)
+
+
+let print_path () =
+  match Sys.getenv "PATH" with
+  | None -> ()
+  | Some path ->
+     path
+     |> String.split ~on:':'
+     |> List.iter ~f:(fun s -> printf "%s\n" s)
+
+
+
+let ratio ~num ~denom =
+  Float.of_int num /. Float.of_int denom
 
 let () =
-  let numbers = Array.init 20 ~f:(fun i -> i) in
-  begin
-    Random.self_init ();
-    shuffle numbers;
-    Array.iter numbers ~f:(printf "%d ");
-    printf "\n";
-    for _ = 10 to 9 do
-      printf "this shouldn't be printed\n"
-    done
-  end
+  print_path ()
+
